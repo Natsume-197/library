@@ -24,7 +24,7 @@ default: &default
 
 development:
   <<: *default
-  database: jplibrary
+  database: jplibrary_dev
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -84,8 +84,6 @@ production:
   primary: &primary_production
     <<: *default
     database: jplibrary_production
-    username: jplibrary
-    password: <%= ENV["JPLIBRARY_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
     database: jplibrary_production_cache

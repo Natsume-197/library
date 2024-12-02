@@ -1,6 +1,6 @@
 [
   {
-    "database": "jplibrary",
+    "database": "jplibrary_production",
     "index": "library",
     "setting": {
       "analysis": {
