@@ -7,6 +7,9 @@ resources:
 #  - ../../base
 namespace: library
 images:
+- name: brigadasos-db
+  newName: ghcr.io/brigadasos/nadeshiko
+  newTag: v0.0.1-alpha
 - name: library
   newName: ghcr.io/brigadasos/library
   newTag: v0.9.1-5
