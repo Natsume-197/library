@@ -21,7 +21,6 @@ gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 gem 'epub-parser'
 gem 'listen'
-gem 'wdm'
 gem 'dotenv-rails'
 gem 'mime-types'
 
