@@ -1,0 +1,104 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: library-db-pv
+  labels:
+    type: local
+    app: library-db
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 200Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/nvme1/library/"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: library-db-pv-claim
+  labels:
+    app: library-db
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: library-db
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: library-db
+  template:
+    metadata:
+      labels:
+        app: library-db
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - image: library-db
+          name: library-db
+          envFrom:
+            - configMapRef:
+                name: library-db-config
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - mountPath: /data/
+              name: library-db-vol
+      volumes:
+        - name: library-db-vol
+          persistentVolumeClaim:
+            claimName: library-db-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: library-db-service
+  labels:
+    app: library-db
+spec:
+  selector:
+    app: library-db
+  ports:
+   - port: 5000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: library-db-ingress
+  labels:
+    app: library-db
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "10G"
+    nginx.org/client-max-body-size: "10G"
+    cert-manager.io/cluster-issuer: clusterissuer-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - library.nadeshiko.co
+      secretName: certificate-library-db
+  rules:
+    - host: library.nadeshiko.co
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: library-db-service
+                port:
+                  number: 5000

@@ -1,0 +1,35 @@
+<% if books.present? %>
+  <h2 class="subheading"><%= pluralize(books.size, "book") %> found:</h2>
+  <div class="book-list">
+    <% books.each do |book| %>
+      <div class="book-card">
+        <div class="book-card-content">
+          <% if book[:path_image].present? %>
+            <img src="<%= book[:path_image] %>" alt="Cover for <%= book[:title] || 'Book' %>" class="book-cover">
+          <% else %>
+            <img src="/assets/placeholder.png" alt="Placeholder cover" class="book-cover">
+          <% end %>
+
+          <div class="book-details">
+            <h3 class="book-title">
+              <%= raw(book[:highlighted_title_readingform] || book[:highlighted_title] || book[:title] || "No Title Available") %>
+            </h3>
+            <p><strong>Author:</strong> <%= raw(book[:highlighted_author] || book[:author] || "Unknown") %></p>
+            <p><strong>Filesize:</strong> <%= raw(book[:filesize] || "Unknown") %></p>
+            <p><strong>Filetype:</strong> <%= raw(book[:filetype] || "Unknown") %></p>
+            <p><strong>Source:</strong> <%= raw(book[:source] || "Unknown") %></p>
+            <p><strong>Accuracy:</strong> <%= book[:score] %></p>
+            <div class="links">
+              <% if book[:path_download].present? %>
+                <%= link_to "Download", download_book_path(book[:id]), class: "btn btn-success", download: true %>
+                <%= link_to "Read online", "https://reader.nadeshiko.co/addbook.html?url=" + CGI.escape(book[:path_download]), class: "btn btn-success" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="no-results">No results found.</p>
+<% end %>

@@ -1,0 +1,3 @@
+# Elasticsearch
+rake elastic:rebuild
+rake library:watch

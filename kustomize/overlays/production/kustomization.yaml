@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- library-db-prod.yaml
+- pgroonga.yaml
+- pgsync.yaml
+#  - ../../base
+namespace: library
+images:
+- name: library
+  newName: ghcr.io/brigadasos/library
+  newTag: v0.9.1-5

@@ -1,0 +1,13 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector("#search-form");
+
+  form.addEventListener("ajax:success", (event) => {
+    const [data, _status, xhr] = event.detail;
+    const resultsContainer = document.querySelector("#search-results");
+    resultsContainer.innerHTML = xhr.responseText;
+  });
+
+  form.addEventListener("ajax:error", () => {
+    alert("There was an error processing your request.");
+  });
+});

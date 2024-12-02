@@ -1,0 +1,22 @@
+<%= javascript_include_tag "stars-background", defer: true %>
+
+
+<body>
+  <div class="container">
+    <h1 class="heading">図書館</h1>
+
+    <!-- Formulario de búsqueda -->
+    <div class="search-form">
+    <%= form_with url: books_path, method: :get, remote: true, id: "search-form" do %>
+      <div class="form-group">
+        <%= text_field_tag :query, params[:query], placeholder: "Search for books...", class: "form-control dark-input" %>
+        <%= submit_tag "Search", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+    <!-- Mostrar resultados -->
+    <div id="search-results">
+    <%= render "books_list", books: @books %>
+  </div>
+</body>
