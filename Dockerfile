@@ -1,7 +1,13 @@
 # Base Image
 FROM ruby:3.3.6
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs yarn
-
+RUN apt-get update -qq && apt-get install -y \
+  nodejs \
+  libssl-dev \
+  libreadline-dev \
+  zlib1g-dev \
+  build-essential \
+  curl
+  
 # Set working directory
 WORKDIR /app
 
