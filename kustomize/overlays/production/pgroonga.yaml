@@ -1,7 +1,7 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: pgroonga-pvolume
+  name: pgroonga-library-pvolume
   labels:
     type: local
     app: pgroonga
@@ -17,7 +17,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: pgroonga-pvolume-claim
+  name: pgroonga-library-pvolume-claim
   labels:
     app: pgroonga
 spec:
@@ -57,7 +57,7 @@ spec:
       volumes:
         - name: pgroongadb
           persistentVolumeClaim:
-            claimName: pgroonga-pvolume-claim
+            claimName: pgroonga-library-pvolume-claim
 ---
 apiVersion: v1
 kind: Service
