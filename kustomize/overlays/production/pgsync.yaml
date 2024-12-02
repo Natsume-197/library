@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pgsync-data
+  name: pgsync-library-data
 spec:
   storageClassName: local-storage-library
   capacity:
@@ -40,11 +40,11 @@ spec:
             - configMapRef:
                 name: pgsync-config
           volumeMounts:
-            - name: pgsync-data
+            - name: pgsync-library-data
               mountPath: /data
   volumeClaimTemplates:
     - metadata:
-        name: pgsync-data
+        name: pgsync-library-data
       spec:
         accessModes: [ "ReadWriteOnce" ]
         storageClassName: "local-storage-library"
