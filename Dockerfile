@@ -13,7 +13,6 @@ WORKDIR /app
 
 # Install gems
 COPY Gemfile Gemfile.lock /app/
-RUN bundle config set without 'development test'
 RUN gem install bundler && bundle install --jobs=3 --retry=3
 
 # Copy application code
