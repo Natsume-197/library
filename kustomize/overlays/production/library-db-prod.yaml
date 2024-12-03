@@ -52,7 +52,7 @@ spec:
             - configMapRef:
                 name: library-db-config
           ports:
-            - containerPort: 5000
+            - containerPort: 3000
           volumeMounts:
             - mountPath: /data/
               name: library-db-vol
@@ -71,7 +71,7 @@ spec:
   selector:
     app: library-db
   ports:
-   - port: 5000
+   - port: 3000
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -101,4 +101,4 @@ spec:
               service:
                 name: library-db-service
                 port:
-                  number: 5000
+                  number: 3000
