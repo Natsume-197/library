@@ -1,5 +1,5 @@
 # Base Image
-FROM ruby:3.3.6
+FROM ruby:3.3.6-alpine
 RUN apt-get update -qq && apt-get install -y \
   nodejs \
   libssl-dev \
@@ -13,7 +13,8 @@ WORKDIR /app
 
 # Install gems
 COPY Gemfile Gemfile.lock /app/
-RUN gem install bundler && bundle install
+RUN bundle config set without 'development test'
+RUN gem install bundler && bundle install --jobs=3 --retry=3
 
 # Copy application code
 COPY . /app
