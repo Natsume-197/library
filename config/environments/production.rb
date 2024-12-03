@@ -84,7 +84,8 @@ Rails.application.configure do
   config.hosts = [
      /.*\.natsucloud\.com/,
      /.*\.nadeshiko\.co/,
-     /.*\.brigadasos\.xyz/ 
+     /.*\.brigadasos\.xyz/,
+     "library.nadeshiko.co"
   ]
   
   #

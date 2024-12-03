@@ -18,8 +18,10 @@ RUN gem install bundler && bundle install --jobs=3 --retry=3
 # Copy application code
 COPY . /app
 
+RUN bundle exec rails assets:precompile
+
 # Expose port
 EXPOSE 3000
 
 # Command to run the app
-CMD ["rails", "server", "-b", "0.0.0.0"]
+CMD ["rails", "server", "-e", "production", "-b", "0.0.0.0"]
