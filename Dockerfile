@@ -1,5 +1,5 @@
 # Base Image
-FROM ruby:3.3.6-alpine
+FROM ruby:3.3.6
 RUN apt-get update -qq && apt-get install -y \
   nodejs \
   libssl-dev \
