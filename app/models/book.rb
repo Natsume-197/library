@@ -2,7 +2,7 @@ class Book < ApplicationRecord
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
-  index_name 'library'
+  index_name  ENV.fetch("ELASTICSEARCH_INDEX", "library")
 
   settings index: {
     analysis: {
