@@ -34,7 +34,7 @@ services:
       - discovery.type=single-node
       - ES_JAVA_OPTS=-Xms1g -Xmx1g
       - xpack.security.enabled=false
-      - network.host=127.0.0.1
+      - network.host=0.0.0.0
       - http.host=0.0.0.0
     ports:
       - 9200:9200
@@ -102,12 +102,12 @@ services:
     environment:
       PG_USER: ${PG_USER}
       PG_PASSWORD: ${PG_PASSWORD}
-      PG_HOST: pgroonga
+      PG_HOST: ${PG_HOST}
       PG_PORT: ${PG_PORT}
       LOG_LEVEL: INFO
       ELASTICSEARCH_PORT: 9200
       ELASTICSEARCH_SCHEME: http
-      ELASTICSEARCH_HOST: elasticsearch
+      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST}
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_AUTH: library

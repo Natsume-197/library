@@ -2,7 +2,7 @@ class BooksController < ApplicationController
   def index
     query = params[:query].presence || '*'
 
-    author_filter = params[:author_eng].presence
+    author_filter = params[:author_jp].presence
     title_filter = params[:title_jp].presence
 
     page = params[:page].to_i.positive? ? params[:page].to_i : 1

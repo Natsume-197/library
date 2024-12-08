@@ -21,5 +21,11 @@ COPY . /app
 # Expose port
 EXPOSE 3000
 
+RUN bundle exec rake assets:precompile
+
+# Copiar el entrypoint al contenedor
+COPY app/entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 # Command to run the app
-CMD ["rails", "server", "-e", "production", "-b", "0.0.0.0"]
+ENTRYPOINT ["/app/entrypoint.sh"]

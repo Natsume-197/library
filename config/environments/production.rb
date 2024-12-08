@@ -4,7 +4,8 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   config.secret_key_base = ENV["SECRET_KEY_BASE"]
-  
+  Elasticsearch::Model.client = Elasticsearch::Client.new host: ENV['ELASTICSEARCH_HOST']
+
   # Code is not reloaded between requests.
   config.enable_reloading = false
 
@@ -40,7 +41,7 @@ Rails.application.configure do
   config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
 
   # Change to "debug" to log everything (including potentially personally-identifiable information!)
-  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
+  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "debug")
 
   # Prevent health checks from clogging up the logs.
   config.silence_healthcheck_path = "/up"
@@ -87,7 +88,8 @@ Rails.application.configure do
      /.*\.natsucloud\.com/,
      /.*\.nadeshiko\.co/,
      /.*\.brigadasos\.xyz/,
-     "library.nadeshiko.co"
+     "library.nadeshiko.co",
+     "localhost"
   ]
   
   #

@@ -607,7 +607,7 @@
       "columns": [
         "id",
         "title_jp",
-        "author_eng",
+        "author_jp",
         "path_image",
         "path_download"
       ],
@@ -646,7 +646,7 @@
             "type": "keyword",
             "index": false
           },
-          "author_eng": {
+          "author_jp": {
             "type": "text",
             "analyzer": "ja_original_index_analyzer",
             "term_vector": "with_positions_offsets",
