@@ -1,15 +1,41 @@
+require 'concurrent-ruby'
 require 'listen'
 require 'epub/parser'
 require 'dotenv/load'
 require 'mime/types'
 
 class LibraryWatcher
+  @is_watcher_running = false
+
+  def self.is_watcher_running
+    @is_watcher_running
+  end
+
+  def self.set_watcher_running(state)
+    @is_watcher_running = state
+  end
+
   def initialize
     @library_path = Rails.root.join('app', 'library')
     Rails.logger.info "LibraryWatcher initialized. Path: #{@library_path}"
+    @pool = Concurrent::ThreadPoolExecutor.new(
+      min_threads: 2,       
+      max_threads: 10,      
+      max_queue: 100,       
+      fallback_policy: :caller_runs  
+    )
+
   end
 
   def start
+    if self.class.is_watcher_running
+      Rails.logger.info "LibraryWatcher is already running."
+      return
+    end
+
+    Rails.logger.info "Starting LibraryWatcher process..."
+    self.class.set_watcher_running(true)
+
     Rails.logger.info "Processing existing files..."
     process_existing_files
 
@@ -21,12 +47,18 @@ class LibraryWatcher
       end
     end
 
-    listener.start
-    Rails.logger.info "LibraryWatcher is now monitoring #{@library_path}."
-    loop do
-      Rails.logger.info "LibraryWatcher is active. Monitoring for changes... (#{Time.now})"
-      sleep 10
+    Thread.new do
+      listener.start
+      Rails.logger.info "LibraryWatcher is now monitoring #{@library_path}."
+      loop do
+        Rails.logger.info "LibraryWatcher is active. Monitoring for changes... (#{Time.now})"
+        sleep 10
+      end
     end
+  end
+
+  def self.stop
+    self.set_watcher_running(false)
   end
 
   private
@@ -35,8 +67,10 @@ class LibraryWatcher
     Rails.logger.info "Scanning existing files in #{@library_path}..."
     Dir.glob(File.join(@library_path, '**', '*.epub')).each do |file_path|
       Rails.logger.info "Processing existing file: #{file_path}"
-      process_epub(file_path)
+      @pool.post { process_epub(file_path) }
     end
+    @pool.shutdown
+    @pool.wait_for_termination
   end
 
   def process_epub(file_path)
@@ -79,10 +113,6 @@ class LibraryWatcher
     Rails.logger.error "Failed to process file: #{file_path}. Error: #{e.message}"
   end
 
-  def extract_title(epub)
-    epub.metadata.title || "Unknown Title"
-  end
-
   def extract_japanese_title(epub)
     epub.metadata.title || "Unknown Japanese Title"
   end
@@ -119,5 +149,4 @@ class LibraryWatcher
     Rails.logger.error "Failed to save cover image: #{file_path}. Error: #{e.message}"
     nil
   end
-  
 end
