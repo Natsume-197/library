@@ -15,4 +15,4 @@ images:
   newTag: v0.9.1-5
 - name: library-db
   newName: ghcr.io/brigadasos/library
-  newTag: v0.1.4-alpha
+  newTag: v0.1.5-alpha
