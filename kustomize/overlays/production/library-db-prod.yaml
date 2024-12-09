@@ -54,7 +54,7 @@ spec:
           ports:
             - containerPort: 3000
           volumeMounts:
-            - mountPath: /data/
+            - mountPath: /app/library
               name: library-db-vol
       volumes:
         - name: library-db-vol
